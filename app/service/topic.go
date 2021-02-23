@@ -32,9 +32,7 @@ func (s *TopicService) GetAll() []string {
 // GetTopic : get random topic
 func (s *TopicService) GetTopic() string {
 	i := rand.Intn(len(s.topics))
-	selectedTopic := s.topics[i]
-	s.topics = removeTopic(s.topics, selectedTopic)
-	return selectedTopic
+	return s.topics[i]
 }
 
 // Delete : delete topic

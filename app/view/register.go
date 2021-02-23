@@ -49,9 +49,12 @@ func (t ViewType) title() string {
 // Render : render view
 func (v *RegisterView) Render() app.UI {
 	return app.Div().Body(
-		app.Div().Class("navbar").Body(
-			app.P().Class("navbar-title").Text("Dicetalk 설정하기"),
-		),
+		Navbar("환경설정", []NavbarItem{
+			{
+				Herf: "/",
+				Text: "적용하기",
+			},
+		}),
 		v.Section(MemberViewType, v.MemberService.GetAll()),
 		v.Section(TopicViewType, v.TopicService.GetAll()),
 	)
@@ -84,11 +87,12 @@ func (v *RegisterView) Section(viewType ViewType, items []string) app.UI {
 
 // Field : field
 func (v *RegisterView) Field(viewType ViewType) app.UI {
-	return app.Div().Class("in-line").Body(
+	return app.Div().Class("row field").Body(
 		app.Input().
-			Class("text-input").
+			Class("col s10").
 			Type("text").
 			Name("name").
+			OnFocus(v.ClearTextInput).
 			Value("").
 			Placeholder(viewType.placeholder()).
 			OnChange(func() app.EventHandler {
@@ -100,21 +104,28 @@ func (v *RegisterView) Field(viewType ViewType) app.UI {
 				}
 				return nil
 			}()),
-		app.Input().
-			Class("input-button").
-			Type("button").
-			Name("name").
-			Value("추가").
-			OnClick(func() app.EventHandler {
-				switch viewType {
-				case TopicViewType:
-					return v.DidTapRegisterTopicButton
-				case MemberViewType:
-					return v.DidTapRegisterMemberButton
-				}
-				return nil
-			}()),
+		app.Div().
+			Class("col s2").
+			Class("btn").
+			Body(
+				app.Span().Text("추가"),
+			).OnClick(func() app.EventHandler {
+			switch viewType {
+			case TopicViewType:
+				return v.DidTapRegisterTopicButton
+			case MemberViewType:
+				return v.DidTapRegisterMemberButton
+			}
+			return nil
+		}()),
 	)
+}
+
+// ClearTextInput : clear text input on focus
+func (v *RegisterView) ClearTextInput(ctx app.Context, e app.Event) {
+
+	ctx.JSSrc.Set("value", "")
+	v.Update()
 }
 
 // OnChangeMemberField : member field on change
@@ -134,6 +145,7 @@ func (v *RegisterView) DidTapRegisterMemberButton(ctx app.Context, e app.Event) 
 
 	if len(v.currentMember) > 0 {
 		v.MemberService.Append(v.currentMember)
+		v.currentMember = ""
 	}
 
 	v.Update()
@@ -144,6 +156,7 @@ func (v *RegisterView) DidTapRegisterTopicButton(ctx app.Context, e app.Event) {
 
 	if len(v.currentTopic) > 0 {
 		v.TopicService.Append(v.currentTopic)
+		v.currentTopic = ""
 	}
 
 	v.Update()
