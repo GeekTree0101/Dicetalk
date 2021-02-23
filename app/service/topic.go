@@ -19,12 +19,27 @@ func (s *TopicService) Appends(topics []string) {
 	s.topics = topics
 }
 
+// Append : append topic
+func (s *TopicService) Append(topic string) {
+	s.topics = append(s.topics, topic)
+}
+
+// GetAll : get all members
+func (s *TopicService) GetAll() []string {
+	return s.topics
+}
+
 // GetTopic : get random topic
 func (s *TopicService) GetTopic() string {
 	i := rand.Intn(len(s.topics))
 	selectedTopic := s.topics[i]
 	s.topics = removeTopic(s.topics, selectedTopic)
 	return selectedTopic
+}
+
+// Delete : delete topic
+func (s *TopicService) Delete(t string) {
+	s.topics = removeTopic(s.topics, t)
 }
 
 func removeTopic(ts1 []string, t1 string) []string {

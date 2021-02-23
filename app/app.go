@@ -10,6 +10,9 @@ func main() {
 	ts := service.TopicService{}
 	ms := service.MemberService{}
 
+	ts.Appends([]string{"david kill", "sonic boom"})
+	ms.Appends([]string{"david", "martry", "eric"})
+
 	app.Route("/", &view.DicetalkView{
 		TopicService:  &ts,
 		MemberService: &ms,
