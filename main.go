@@ -10,7 +10,15 @@ func main() {
 	ts := service.TopicService{}
 	ms := service.MemberService{}
 
-	app.Route("/", &view.DicetalkView{})
-	app.Route("/register", &view.RegisterView{})
+	app.Route("/", &view.DicetalkView{
+		TopicService:  &ts,
+		MemberService: &ms,
+	})
+
+	app.Route("/register", &view.RegisterView{
+		TopicService:  &ts,
+		MemberService: &ms,
+	})
+
 	app.Run()
 }

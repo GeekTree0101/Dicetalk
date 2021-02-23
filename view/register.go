@@ -1,10 +1,15 @@
 package view
 
-import "github.com/maxence-charriere/go-app/v7/pkg/app"
+import (
+	"github.com/GeekTree0101/Dicetalk/service"
+	"github.com/maxence-charriere/go-app/v7/pkg/app"
+)
 
 // RegisterView : register view
 type RegisterView struct {
 	app.Compo
+	TopicService  *service.TopicService
+	MemberService *service.MemberService
 }
 
 // Render : render view

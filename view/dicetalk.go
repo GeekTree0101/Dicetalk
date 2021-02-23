@@ -1,11 +1,16 @@
 package view
 
-import "github.com/maxence-charriere/go-app/v7/pkg/app"
+import (
+	"github.com/GeekTree0101/Dicetalk/service"
+	"github.com/maxence-charriere/go-app/v7/pkg/app"
+)
 
 // DicetalkView : dice talk view
 type DicetalkView struct {
 	app.Compo
-	name string
+	name          string
+	TopicService  *service.TopicService
+	MemberService *service.MemberService
 }
 
 // Render : render view
