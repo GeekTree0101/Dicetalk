@@ -1,5 +1,10 @@
 package service
 
+import (
+	"math/rand"
+	"time"
+)
+
 // TopicService : topic manager
 type TopicService struct {
 	topics []string
@@ -17,7 +22,7 @@ func (s *TopicService) Appends(topics []string) {
 // GetTopic : get random topic
 func (s *TopicService) GetTopic() string {
 	i := rand.Intn(len(s.topics))
-	selectedTopic = topics[i]
+	selectedTopic := s.topics[i]
 	s.topics = removeTopic(s.topics, selectedTopic)
 	return selectedTopic
 }

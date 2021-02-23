@@ -1,5 +1,10 @@
 package service
 
+import (
+	"math/rand"
+	"time"
+)
+
 // MemberService : member service
 type MemberService struct {
 	members []string
@@ -15,7 +20,7 @@ func (s *MemberService) Appends(members []string) {
 }
 
 // GetMember : get random member
-func (s *TopicService) GetMember() string {
+func (s *MemberService) GetMember() string {
 	i := rand.Intn(len(s.members))
-	return members[i]
+	return s.members[i]
 }
