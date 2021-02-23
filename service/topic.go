@@ -27,11 +27,11 @@ func (s *TopicService) GetTopic() string {
 	return selectedTopic
 }
 
-func removeTopic(ts2 []string, t1 string) []string {
+func removeTopic(ts1 []string, t1 string) []string {
 
 	ts2 := []string{}
 
-	for i, t2 := range ts {
+	for _, t2 := range ts1 {
 		if t2 != t1 {
 			ts2 = append(ts2, t2)
 		}
