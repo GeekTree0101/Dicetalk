@@ -7,9 +7,10 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/maxence-charriere/go-app/v7/pkg/app"
 )
 
@@ -20,7 +21,9 @@ func main() {
 		port = "7777"
 	}
 
-	http.ListenAndServe(":"+port, &app.Handler{
+	e := echo.New()
+
+	app := app.Handler{
 		Title: "Dicetalk",
 		Styles: []string{
 			"/web/main.css",
@@ -29,5 +32,13 @@ func main() {
 		Scripts: []string{
 			"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js",
 		},
+	}
+
+	e.GET("/", func(c echo.Context) error {
+		app.ServeHTTP(c.Response().Writer, c.Request())
+		return nil
 	})
+
+	e.Use(middleware.Logger())
+	e.Logger.Fatal(e.Start(":" + port))
 }
