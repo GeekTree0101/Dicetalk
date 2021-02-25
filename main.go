@@ -1,24 +1,44 @@
+// +build !wasm
+
+// The server is a classic Go program that can run on various architecture but
+// not on WebAssembly. Therefore, the build instruction above is to exclude the
+// code below from being built on the wasm architecture.
+
 package main
 
 import (
-	"github.com/GeekTree0101/Dicetalk/service"
-	"github.com/GeekTree0101/Dicetalk/view"
+	"os"
+
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/maxence-charriere/go-app/v7/pkg/app"
 )
 
 func main() {
-	ts := service.TopicService{}
-	ms := service.MemberService{}
 
-	app.Route("/", &view.DicetalkView{
-		TopicService:  &ts,
-		MemberService: &ms,
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "7777"
+	}
+
+	e := echo.New()
+
+	app := app.Handler{
+		Title: "Dicetalk",
+		Styles: []string{
+			"/web/main.css",
+			"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css",
+		},
+		Scripts: []string{
+			"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js",
+		},
+	}
+
+	e.GET("/", func(c echo.Context) error {
+		app.ServeHTTP(c.Response().Writer, c.Request())
+		return nil
 	})
 
-	app.Route("/register", &view.RegisterView{
-		TopicService:  &ts,
-		MemberService: &ms,
-	})
-
-	app.Run()
+	e.Use(middleware.Logger())
+	e.Logger.Fatal(e.Start(":" + port))
 }
